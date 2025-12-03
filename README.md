@@ -8,8 +8,8 @@ This fork contains a fix for the **macOS horizontal scroll direction issue** ([b
 
 This fork removes the erroneous sign inversion on the horizontal scroll axis in `src/lib/platform/OSXScreen.mm`:
 
-1. **In `handleSystemEvent`** - Changed `onMouseWheel(-mapScrollWheelToBarrier(xScroll), ...)` to `onMouseWheel(mapScrollWheelToBarrier(xScroll), ...)`
-2. **In `fakeMouseWheel`** - Changed `-mapScrollWheelFromBarrier(xDelta)` to `mapScrollWheelFromBarrier(xDelta)`
+1. **In `handleSystemEvent`** (line ~1028 in `src/lib/platform/OSXScreen.mm`) - Changed `onMouseWheel(-mapScrollWheelToBarrier(xScroll), ...)` to `onMouseWheel(mapScrollWheelToBarrier(xScroll), ...)`
+2. **In `fakeMouseWheel`** (line ~677 in `src/lib/platform/OSXScreen.mm`) - Changed `-mapScrollWheelFromBarrier(xDelta)` to `mapScrollWheelFromBarrier(xDelta)`
 
 ## Migration to Deskflow
 
@@ -17,7 +17,7 @@ This fork removes the erroneous sign inversion on the horizontal scroll axis in 
 
 ### Does Deskflow have this fix?
 
-Deskflow has implemented scroll direction handling differently with a `mapClientScrollDirection` function and an `invertScrolling` option. However, horizontal scroll direction issues may still exist. Check the following Deskflow issues for current status:
+Deskflow may have implemented scroll direction handling differently, including a `mapClientScrollDirection` function and an `invertScrolling` option. However, horizontal scroll direction issues may still exist. Check the following Deskflow issues for current status:
 
 - [Horizontal Scrolling Not Working - #7220](https://github.com/deskflow/deskflow/issues/7220)
 - [Horizontal Scrolling registered as forward/backward - #8630](https://github.com/deskflow/deskflow/issues/8630)
@@ -27,11 +27,12 @@ Deskflow has implemented scroll direction handling differently with a `mapClient
 If you want to contribute a similar fix to Deskflow:
 
 1. Fork [deskflow/deskflow](https://github.com/deskflow/deskflow)
-2. Look at `src/lib/platform/OSXScreen.mm` - note that function names have changed:
+2. Locate the macOS screen handling code (likely in `src/lib/platform/OSXScreen.mm`, though the path may differ in newer versions). Note that function names have changed from Barrier:
    - `mapScrollWheelToBarrier` → `mapScrollWheelToDeskflow`
    - `mapScrollWheelFromBarrier` → `mapScrollWheelFromDeskflow`
-3. The relevant lines to check are in `handleSystemEvent` and `fakeMouseWheel`
-4. Submit a PR with your fix
+3. Look for the equivalent of `handleSystemEvent` and `fakeMouseWheel` functions
+4. Check if horizontal scroll values are being negated incorrectly
+5. Submit a PR with your fix
 
 ### Using This Fork (Barrier)
 
