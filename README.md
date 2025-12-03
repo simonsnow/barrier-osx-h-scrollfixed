@@ -1,4 +1,49 @@
-# Barrier
+# Barrier - macOS Horizontal Scroll Fix
+
+> **⚠️ Important Notice: Barrier is no longer maintained. Consider migrating to [Deskflow](https://github.com/deskflow/deskflow), the actively maintained successor.**
+
+This fork contains a fix for the **macOS horizontal scroll direction issue** ([barrier#476](https://github.com/debauchee/barrier/issues/476)), where horizontal scrolling (e.g., two-finger horizontal swipe on trackpad) was inverted on macOS clients.
+
+## The Fix
+
+This fork removes the erroneous sign inversion on the horizontal scroll axis in `src/lib/platform/OSXScreen.mm`:
+
+1. **In `handleSystemEvent`** - Changed `onMouseWheel(-mapScrollWheelToBarrier(xScroll), ...)` to `onMouseWheel(mapScrollWheelToBarrier(xScroll), ...)`
+2. **In `fakeMouseWheel`** - Changed `-mapScrollWheelFromBarrier(xDelta)` to `mapScrollWheelFromBarrier(xDelta)`
+
+## Migration to Deskflow
+
+**Barrier development has stopped.** The community has moved to [Deskflow](https://github.com/deskflow/deskflow), which is now the official open-source successor.
+
+### Does Deskflow have this fix?
+
+Deskflow has implemented scroll direction handling differently with a `mapClientScrollDirection` function and an `invertScrolling` option. However, horizontal scroll direction issues may still exist. Check the following Deskflow issues for current status:
+
+- [Horizontal Scrolling Not Working - #7220](https://github.com/deskflow/deskflow/issues/7220)
+- [Horizontal Scrolling registered as forward/backward - #8630](https://github.com/deskflow/deskflow/issues/8630)
+
+### Contributing This Fix to Deskflow
+
+If you want to contribute a similar fix to Deskflow:
+
+1. Fork [deskflow/deskflow](https://github.com/deskflow/deskflow)
+2. Look at `src/lib/platform/OSXScreen.mm` - note that function names have changed:
+   - `mapScrollWheelToBarrier` → `mapScrollWheelToDeskflow`
+   - `mapScrollWheelFromBarrier` → `mapScrollWheelFromDeskflow`
+3. The relevant lines to check are in `handleSystemEvent` and `fakeMouseWheel`
+4. Submit a PR with your fix
+
+### Using This Fork (Barrier)
+
+If you still need to use Barrier with the horizontal scroll fix:
+
+1. Clone this repository
+2. Follow the [build instructions](https://github.com/debauchee/barrier/wiki/Building-on-macOS) from the original Barrier wiki
+3. Build and install
+
+---
+
+## Original Barrier Documentation
 
 Eliminate the barrier between your machines.
 Find [releases for windows and macOS here](https://github.com/debauchee/barrier/releases).
