@@ -34,12 +34,15 @@ if [ -z "$BARRIER_BUILD_ENV" ]; then
         check_dir_exists "$QT_PATH" 'qt5'
 
         export BARRIER_BUILD_BREW=1
-	export CMAKE_OSX_SYSROOT="/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk"
         export CMAKE_PREFIX_PATH="/opt/procursus:$QT_PATH:$CMAKE_PREFIX_PATH"
         export LD_LIBRARY_PATH="/opt/procursus/lib:$LD_LIBRARY_PATH"
         export CPATH="/opt/procursus/include:$CPATH"
         export PKG_CONFIG_PATH="/opt/procursus/lib/pkgconfig:$PKG_CONFIG_PATH"
 	export CMAKE_C_COMPILER_WORKS="True"
+    export CMAKE_TRY_COMPILE_TARGET_TYPE="STATIC_LIBRARY"
+    export CMAKE_OSX_SYSROOT="/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk"
+    export C_INCLUDE_PATH="/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk"
+    export CPLUS_INCLUDE_PATH="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin"
     else
         printf "Neither Homebrew nor Macports is installed. Can't get dependency paths\n"
         exit 1
